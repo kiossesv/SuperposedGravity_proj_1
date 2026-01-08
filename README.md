@@ -23,9 +23,7 @@ The goal is not to test a specific theory, but to provide a robust computational
 - External gravitational potential
 ### Governing Equation
 The time evolution is governed by the time-dependent Schrödinger equation:
-$$
-i \hbar \frac{\partial \psi(x,t)}{\partial t} = \left[ -\frac{\hbar^2}{2m} \frac{\partial^2}{\partial x^2} + V_g(x)\right] \psi(x,t)
-$$
+$$ i \hbar \frac{\partial \psi(x,t)}{\partial t} = \left[ -\frac{\hbar^2}{2m} \frac{\partial^2}{\partial x^2} + V_g(x)\right] \psi(x,t) $$
 where:
 - $\hat{T} = -\frac{\hbar^2}{2m} \frac{d^2}{d x^2}$ is the kinetic operator
 - $V_g(x)$ is the gravitational potential
@@ -33,9 +31,7 @@ where:
 ### Gravitational Scenarios
 #### Case A — Branch-dependent gravitational field
 Two independent gravitational potentials are considered:
-$$
-V_g^{(1)}(x) = m g_1 x, \qquad  V_g^{(2)}(x) = m g_2 x
-$$
+$$ V_g^{(1)}(x) = m g_1 x, \qquad  V_g^{(2)}(x) = m g_2 x $$
 Each branch evolves under its own Hamiltonian.
 #### Case B — Effective symmetric gravitational field
 A single effective gravitational potential:
