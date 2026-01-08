@@ -24,6 +24,7 @@ The goal is not to test a specific theory, but to provide a robust computational
 ### Governing Equation
 The time evolution is governed by the time-dependent Schrödinger equation:
 ![Time-dependent Schrödinger equation](docs/s_eq_2.png)
+![](https://math.vercel.app?bgcolor=auto&from=\LaTeX)
 where:
 - $\hat{T} = -\frac{\hbar^2}{2m} \frac{d^2}{d x^2}$ is the kinetic operator
 - $V_g(x)$ is the gravitational potential
