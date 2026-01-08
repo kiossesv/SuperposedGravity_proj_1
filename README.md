@@ -23,7 +23,7 @@ The goal is not to test a specific theory, but to provide a robust computational
 - External gravitational potential
 ### Governing Equation
 The time evolution is governed by the time-dependent Schrödinger equation:
-$$ i \hbar \frac{\partial \psi(x,t)}{\partial t} = \left[ -\frac{\hbar^2}{2m} \frac{\partial^2}{\partial x^2} + V_g(x)\right] \psi(x,t) $$
+![Time-dependent Schrödinger equation](docs/schrodinger_equation.png)
 where:
 - $\hat{T} = -\frac{\hbar^2}{2m} \frac{d^2}{d x^2}$ is the kinetic operator
 - $V_g(x)$ is the gravitational potential
@@ -39,14 +39,7 @@ $$
 V_g^{(eff)}(x) = m g_{eff} x,
 $$
 This provides a reference evolution with a common time parameter.
-$$
-i\hbar \frac{\partial \psi(x,t)}{\partial t}
-=
-\left[
--\frac{\hbar^2}{2m}\frac{\partial^2}{\partial x^2}
-+ V_g(x)
-\right]\psi(x,t)
-$$
+
 
 ## Numerical Method
 
