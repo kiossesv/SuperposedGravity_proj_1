@@ -39,6 +39,14 @@ $$
 V_g^{(eff)}(x) = m g_{eff} x,
 $$
 This provides a reference evolution with a common time parameter.
+$$
+i\hbar \frac{\partial \psi(x,t)}{\partial t}
+=
+\left[
+-\frac{\hbar^2}{2m}\frac{\partial^2}{\partial x^2}
++ V_g(x)
+\right]\psi(x,t)
+$$
 
 ## Numerical Method
 
