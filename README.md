@@ -93,7 +93,7 @@ To validate the solver, the following checks are performed:
 These diagnostics ensure the physical reliability of the numerical results.
 
 ## Project Structure
-project_1/
+```project_1/
 │
 ├── src/
 │        ├── solvers.py
@@ -114,18 +114,8 @@ project_1/
 ├── figures/
 ├── README.md
 └── requirements.txt
+```
 
-
----
-
-### Minimal example (even simpler)
-If you just want a quick tree:
-
-````markdown
-```text
-src/
-├── main.py
-└── utils.py
 
 
 ## Technologies
