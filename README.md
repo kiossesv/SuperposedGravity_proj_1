@@ -116,6 +116,18 @@ project_1/
 └── requirements.txt
 
 
+---
+
+### Minimal example (even simpler)
+If you just want a quick tree:
+
+````markdown
+```text
+src/
+├── main.py
+└── utils.py
+
+
 ## Technologies
 - Python
 - NumPy
