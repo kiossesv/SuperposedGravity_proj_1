@@ -23,7 +23,7 @@ The goal is not to test a specific theory, but to provide a robust computational
 - External gravitational potential
 ### Governing Equation
 The time evolution is governed by the time-dependent Schrödinger equation:
-![Schrödinger equation](docs/s_eq.svg)
+![Schrödinger equation](docs/schrodinger_equation.svg)
 where:
 - $\hat{T} = -\frac{\hbar^2}{2m} \frac{d^2}{d x^2}$ is the kinetic operator
 - $V_g(x)$ is the gravitational potential
@@ -31,23 +31,103 @@ where:
 ### Gravitational Scenarios
 #### Case A — Branch-dependent gravitational field
 Two independent gravitational potentials are considered:
-$$ V_g^{(1)}(x) = m g_1 x, \qquad  V_g^{(2)}(x) = m g_2 x $$
+$V_g^{(1)}(x) = m g_1 x$ and $V_g^{(2)}(x) = m g_2 x$.
 Each branch evolves under its own Hamiltonian.
 #### Case B — Effective symmetric gravitational field
 A single effective gravitational potential:
-$$
-V_g^{(eff)}(x) = m g_{eff} x,
-$$
+$V_g^{(eff)}(x) = m g_{eff} x$.
 This provides a reference evolution with a common time parameter.
 
 
 ## Numerical Method
-
+### Split-Operator Fourier Method
+Time evolution over a small time step $\Delta t$ is approximated as:
+![Time evolution](docs/time_evolution.svg)
+Key features:
+- Second-order accurate in time
+- Unitary evolution
+- Numerical stability
+The methods exploits:
+- position space for the potential operator
+- momentum space for the kinetic operator
+- **fast Fourier transforms** (FFT) to switch between representations
 
 ## Computational Implementation
+### Spatial Discretization
+- Domain: $x \in [-L/2,L/2]$
+- Uniform grid with N points
+- Periodic boundary conditions (FFT-consistent)
 
+### Momentum Representation
+Momentum space is defined via FFT frequencies: $p_k = \hbar k$.
+
+### Time evolution Algorithm
+For each time step:
+1. Apply half-step potential evolution in position space
+2. Transform to momentum space using FFT
+3. Apply full-step kinetic evolution
+4. Transform back to position space
+5. Apply half-step potential evolution
+
+All evolution operators are precomputed for efficiency.
 
 ## Results
+### Initial state
+The initial quantum state is chosen as a Gaussian wavepacket:
+![Initial state](docs/initial_state.svg)
+The wavefunction is explicitly normalized to ensure numerical consistency.
 
+### Observables
+During time evolution, the following quantities are computed:
+- Expectation value of position $\langle x \rangle(t)$
+- Expectation value of momentum $\langle p \rangle(t)$
+- Norm conservation $|| \psi ||^2$
+- Overlap between branch states: $O(t) = |\langle\psi_1(t)|\psi_2(t)\rangle|$
+
+## Numerical Diagnostics
+To validate the solver, the following checks are performed:
+- Conservation of wavefunction norm
+- Stability with respect to time-step size
+- Qualitative consistency of expectation values
+
+These diagnostics ensure the physical reliability of the numerical results.
+
+## Project Structure
+project_1/
+│
+├── src/
+│        ├── solvers.py
+│        ├── potentials.py
+│        ├── initial_states.py
+│        ├── observables.py
+│        └── utils.py
+│
+├── scripts/
+│        └── run_simulation.py
+│
+├── docs/
+│         ├── initial_state.svg
+│         ├── schrodinger_equation.svg
+│         └── time_evolution.svg
+│
+├── results/
+├── figures/
+├── README.md
+└── requirements.txt
+
+
+## Technologies
+- Python
+- NumPy
+- SciPy
+- Matplotlib
+- FFT-based numerical methods
+
+## Keywords
+Computational Physics, Numerical Simulation, Numerical Solvers, Quantum Systems, Gravitational Fields, Schrödinger Equation, Scientific Computing, Python
 
 ## Outlook
+The current framework provides a clean baseline for:
+- parameter sweeps
+- systematic comparison of gravitational scenarios
+- future integration of machine learning techniques for surrogate modeling and accelerated simulations (Scientific Machine Learning)
