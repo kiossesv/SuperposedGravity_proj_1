@@ -24,6 +24,7 @@ The goal is not to test a specific theory, but to provide a robust computational
 ### Governing Equation
 The time evolution is governed by the time-dependent Schrödinger equation:
 ![Schrödinger equation](docs/schrodinger_equation.svg)
+
 where:
 - $\hat{T} = -\frac{\hbar^2}{2m} \frac{d^2}{d x^2}$ is the kinetic operator
 - $V_g(x)$ is the gravitational potential
@@ -43,6 +44,7 @@ This provides a reference evolution with a common time parameter.
 ### Split-Operator Fourier Method
 Time evolution over a small time step $\Delta t$ is approximated as:
 ![Time evolution](docs/time_evolution.svg)
+
 Key features:
 - Second-order accurate in time
 - Unitary evolution
@@ -75,6 +77,7 @@ All evolution operators are precomputed for efficiency.
 ### Initial state
 The initial quantum state is chosen as a Gaussian wavepacket:
 ![Initial state](docs/initial_state.svg)
+
 The wavefunction is explicitly normalized to ensure numerical consistency.
 
 ### Observables
@@ -93,7 +96,8 @@ To validate the solver, the following checks are performed:
 These diagnostics ensure the physical reliability of the numerical results.
 
 ## Project Structure
-```project_1/
+```
+project_1/
 │
 ├── src/
 │        ├── solvers.py
