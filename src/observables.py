@@ -36,6 +36,8 @@ def expectation_p_fft(psi, p):
     """
     psi_p = np.fft.fft(psi)
 
+# fftshift is required to align momentum grid with Fourier components
+
     psi_p = np.fft.fftshift(psi_p)
     p_shifted = np.fft.fftshift(p)
 

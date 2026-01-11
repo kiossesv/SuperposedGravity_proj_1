@@ -87,6 +87,9 @@ During time evolution, the following quantities are computed:
 - Norm conservation $|| \psi ||^2$
 - Overlap between branch states: $O(t) = |\langle\psi_1(t)|\psi_2(t)\rangle|$
 
+#### A technical note on momentum expectation value
+The calculation of the momentum expectation value ⟨p⟩ required particular care due to the use of FFT-based methods. A direct evaluation in momentum space involves subtle issues related to the ordering of Fourier components, grid alignment, and sign conventions (fft vs fftshift), which can easily lead to unphysical results such as spurious sign flips or cancellations. To avoid these ambiguities and ensure a robust and transparent implementation, the momentum expectation value is ultimately computed using the momentum operator in position space, $\hat{p} = -i\hbar \partial_x$, implemented via spectral differentiation. This approach yields stable and convention-independent results, while remaining fully consistent with the underlying Fourier representation used in the split-operator scheme. 
+
 ## Numerical Diagnostics
 To validate the solver, the following checks are performed:
 - Conservation of wavefunction norm
@@ -97,17 +100,17 @@ These diagnostics ensure the physical reliability of the numerical results.
 
 ## Project Structure
 ```
-project_1/
+SuperposedGravity_proj_1/
 │
 ├── src/
+│        ├── benchmark_free_particle.py
+│        ├── benchmark_linear_gravity.py
 │        ├── solvers.py
 │        ├── potentials.py
 │        ├── initial_states.py
 │        ├── observables.py
 │        └── utils.py
 │
-├── scripts/
-│        └── run_simulation.py
 │
 ├── docs/
 │         ├── initial_state.svg

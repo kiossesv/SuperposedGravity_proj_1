@@ -21,7 +21,7 @@ def free_particle(x):
     return np.zeros_like(x)
 
 
-def linear_gravitational_potential(x, mass, g):
+def linear_gravity_potential(x, mass, g):
     """
     Linear gravitational potential V(x) = m g x.
     """
