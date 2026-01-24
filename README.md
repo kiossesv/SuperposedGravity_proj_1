@@ -1,7 +1,13 @@
-# SuperposedGravity_proj_1
-
 # Numerical Time Evolution of Quantum States in Superposed Gravitational Fields
+### Project 1
 
+## Research Context
+
+This project is part of a three-repository research program on gravitational fields in quantum superposition:
+
+- [Project 1: quantum-gravity-superposition-dynamics](https://github.com/kiossesv/quantum-gravity-superposition-dynamics)
+- [Project 2: quantum-gravity-superposition-stability](https://github.com/kiossesv/quantum-gravity-superposition-stability)
+- [Project 3: quantum-gravity-superposition-sciml](https://github.com/kiossesv/quantum-gravity-superposition-sciml)
 
 ## Overview
 This project implements a numerical solver for the time-dependent Schrödinger equation in one spatial dimension using a split-operator Fourier method.
