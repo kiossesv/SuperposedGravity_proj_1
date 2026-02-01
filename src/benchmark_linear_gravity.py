@@ -17,13 +17,13 @@ from solvers import time_evolution
 # -----------------------------
 hbar = 1.0
 mass = 1.0
-g1 = 0.8
-g2 = 1.2
-geff = 1
-
 x0 = -10.0
 p0 = 5.0
 sigma = 1.0
+
+g1 = 0.8
+g2 = 1.2
+geff = 1
 
 # -----------------------------
 # Numerical parameters
