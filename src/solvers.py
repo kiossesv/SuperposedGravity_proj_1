@@ -6,44 +6,44 @@ import numpy as np
 
 def split_operator_step(psi_x, V_x, U_T, dt, hbar):
     """
-    Perform a single split-operator time step.
+    Perform a single split-operator time step
+    for B independent branches.
 
     Parameters
     ----------
-    psi_x : ndarray (complex)
-        Wavefunction in position space at time t.
-    V_x : ndarray
-        Potential evaluated on the spatial grid.
-    U_T : ndarray
-        Precomputed kinetic evolution operator in momentum space.
-    dt : float
-        Time step.
-    hbar : float
+    psi_x : ndarray (complex), shape (B, N)
+    V_x   : ndarray, shape (B, N)
+    U_T   : ndarray, shape (N,)
+    dt    : float
+    hbar  : float
 
     Returns
     -------
-    psi_x_new : ndarray (complex)
-        Wavefunction after one time step.
+    psi_x_new : ndarray (complex), shape (B, N)
     """
 
-    # --- Half-step potential evolution (position space)
+    # --- Sanity checks (good for CPC-level robustness)
+    assert psi_x.ndim == 2, "psi_x must have shape (B, N)"
+    assert V_x.shape == psi_x.shape, "V_x must match psi_x shape"
+    assert U_T.ndim == 1, "U_T must have shape (N,)"
+
+    # --- Half-step potential
     U_V_half = np.exp(-1j * V_x * dt / (2.0 * hbar))
     psi_x = U_V_half * psi_x
 
-    # --- Transform to momentum space
-    psi_p = np.fft.fft(psi_x)
+    # --- FFT along spatial dimension only
+    psi_p = np.fft.fft(psi_x, axis=1)
 
-    # --- Full-step kinetic evolution (momentum space)
-    psi_p = U_T * psi_p
+    # --- Kinetic evolution
+    psi_p *= U_T
 
-    # --- Transform back to position space
-    psi_x = np.fft.ifft(psi_p)
+    # --- Inverse FFT
+    psi_x = np.fft.ifft(psi_p, axis=1)
 
-    # --- Half-step potential evolution (position space)
-    psi_x = U_V_half * psi_x
+    # --- Half-step potential
+    psi_x *= U_V_half
 
     return psi_x
-
 
 
 
@@ -61,50 +61,30 @@ def time_evolution(
     store_wavefunction=False
 ):
     """
-    Time evolution using the split-operator Fourier method.
-
-    Parameters
-    ----------
-    psi0 : ndarray (complex)
-        Initial wavefunction in position space.
-    V_x : ndarray
-        Potential evaluated on the spatial grid.
-    x_grid : ndarray
-        Spatial grid.
-    p_grid : ndarray
-        Momentum grid.
-    dt : float
-        Time step.
-    n_steps : int
-        Number of time steps.
-    hbar : float
-        Reduced Planck constant.
-    mass : float, optional
-        Particle mass.
-    store_wavefunction : bool, optional
-        If True, store full wavefunction at each time step.
-
-    Returns
-    -------
-    results : dict
-        Dictionary containing time series of observables
-        and optionally wavefunctions.
+    Time evolution using split-operator method
+    for B independent branches.
     """
 
-    # --- Grid spacing
+    # --- Enforce (B, N)
+    assert psi0.ndim == 2, "psi0 must have shape (B, N)"
+    assert V_x.shape == psi0.shape, "V_x must match psi0 shape"
+
+    B, N = psi0.shape
+
     dx = x_grid[1] - x_grid[0]
 
-    # --- Precompute kinetic evolution operator
+    # --- Precompute kinetic operator (1D)
     U_T = np.exp(-1j * p_grid**2 * dt / (2.0 * mass * hbar))
 
-    # --- Initialize storage
-    times = np.arange(n_steps) * dt
-    x_expect = np.zeros(n_steps)
-    p_expect = np.zeros(n_steps)
-    norm = np.zeros(n_steps)
+    # --- Storage arrays (per branch)
+    times = np.linspace(0, n_steps * dt, n_steps + 1)
+
+    x_expect = np.zeros((n_steps + 1, B))
+    p_expect = np.zeros((n_steps + 1, B))
+    norm = np.zeros((n_steps + 1, B))
 
     if store_wavefunction:
-        psi_t = np.zeros((n_steps, len(psi0)), dtype=complex)
+        psi_t = np.zeros((n_steps + 1, B, N), dtype=complex)
 
     # --- Initialize wavefunction
     psi = psi0.copy()
@@ -112,24 +92,37 @@ def time_evolution(
     # --- Time evolution loop
     for n in range(n_steps):
 
-        # Store observables
+        # Observables per branch
         x_expect[n] = expectation_x(psi, x_grid)
         p_expect[n] = expectation_p_op(psi, x_grid, hbar)
-        norm[n] = np.sum(np.abs(psi)**2) * dx
-        
+
+        norm[n] = np.sum(np.abs(psi)**2, axis=1) * dx
 
         if store_wavefunction:
             psi_t[n] = psi
 
-        # Propagate one time step
+        # Propagate
         psi = split_operator_step(psi, V_x, U_T, dt, hbar)
+
+    # --- Final state storage
+    x_expect[-1] = expectation_x(psi, x_grid)
+    p_expect[-1] = expectation_p_op(psi, x_grid, hbar)
+    norm[-1] = np.sum(np.abs(psi)**2, axis=1) * dx
+
+    if store_wavefunction:
+        psi_t[-1] = psi
+
+    # --- Norm deviation per branch
+    norm_deviation = np.abs(norm - 1.0)
+    norm_deviation[norm_deviation < 1e-16] = 1e-16
 
     # --- Collect results
     results = {
         "time": times,
         "x_expectation": x_expect,
         "p_expectation": p_expect,
-        "norm": norm
+        "norm": norm,
+        "norm_deviation": norm_deviation
     }
 
     if store_wavefunction:
